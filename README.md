@@ -7,7 +7,8 @@ Welcome to the **MDP_DP** folder! This section of the repository focuses on **Ma
 ## 🏭 Warehouse Maintenance Optimization with MDPs & Dynamic Programming ⚙️
 
 ![MDP Diagram](./MDP_DP/assets/MDP_diagram.png)
-) *Visualization of the warehouse maintenance MDP*
+
+*Visualization of the warehouse maintenance MDP*
 
 ### 🔍 Problem Statement
 **Task:** Optimize maintenance strategies for robotic systems in a warehouse using Reinforcement Learning.  
