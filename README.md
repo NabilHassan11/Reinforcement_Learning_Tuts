@@ -45,11 +45,12 @@ def get_transitions(state, action):
 ```
 
 🌐 Environment Dynamics
-|State	|Action	|Transitions	|Reward
-|🟢 O	|CO	|80% stay O, 20% → 🟡 NM	|+20 if stays O
-|🟡 NM	|PM	|100% → 🔵 M	|0
-|🔵 M	|SM	|100% → 🟢 O	|+20
-|🔴 B	|R	|100% → 🟢 O	|+20
+|State	|Action	|Transitions	|Reward|
+|-------|-------|---------------|------|
+|🟢 O	|CO	|80% stay O, 20% → 🟡 NM	|+20 if stays O|
+|🟡 NM	|PM	|100% → 🔵 M	|0|
+|🔵 M	|SM	|100% → 🟢 O	|+20|
+|🔴 B	|R	|100% → 🟢 O	|+20|
 
 ⛔Note: The Environment Dynamics is not fully written here you can refer for it from the code 
 
