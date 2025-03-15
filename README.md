@@ -6,7 +6,8 @@ Welcome to the **MDP_DP** folder! This section of the repository focuses on **Ma
 
 ## 🏭 Warehouse Maintenance Optimization with MDPs & Dynamic Programming ⚙️
 
-![MDP Diagram](![image](https://github.com/user-attachments/assets/2de85248-1870-4817-95cc-d5df6275fd89)
+![MDP Diagram]([image](https://github.com/user-attachments/assets/04281750-c46e-4c50-93a4-f2284c632e57)
+)
 ) *Visualization of the warehouse maintenance MDP*
 
 ### 🔍 Problem Statement
