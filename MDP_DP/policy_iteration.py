@@ -7,7 +7,7 @@ actions = ['PM', 'CO', 'SM', 'R']
 gamma = 0.9
 theta = 1e-6
 
-# Initial policy and values (per quiz instructions)
+# Initial policy and values
 policy = {'O': 'CO', 'NM': 'SM', 'M': 'CO', 'B': 'PM'}
 V = np.zeros(len(states))
 
