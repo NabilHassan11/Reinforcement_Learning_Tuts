@@ -23,6 +23,11 @@ for episode in episodes:
             first_visit.append(False)
     episode["first_visit"] = first_visit
 
+# [{'states': ['A', 'A', 'B', 'A', 'B'], 'rewards': [3, 2, -4, 4, -3], 'first_visit': [True, False, True, False, False]},
+#  {'states': ['B', 'A', 'B'], 'rewards': [-2, 3, -3], 'first_visit': [True, True, False]}]
+
+
+
 def mc_prediction(episodes, method="first_visit", gamma=1.0):
     """
     Compute state-value functions using Monte Carlo methods.
@@ -46,6 +51,7 @@ def mc_prediction(episodes, method="first_visit", gamma=1.0):
         # Process the episode backward
         for t in reversed(range(len(rewards))):
             state = states[t]
+            # print(state)
             reward = rewards[t]
             G = gamma * G + reward  # Update discounted return
             
@@ -59,13 +65,14 @@ def mc_prediction(episodes, method="first_visit", gamma=1.0):
                 if state not in returns:
                     returns[state] = []
                 returns[state].append(G)
+            # print(returns)
     
     # Calculate average returns for each state
     V = {state: sum(returns_list) / len(returns_list) for state, returns_list in returns.items()}
     return V
 
 # Calculate values using First-Visit and Every-Visit MC
-V_first_visit = mc_prediction(episodes, method="first_visit", gamma=1.0)
+# V_first_visit = mc_prediction(episodes, method="first_visit", gamma=1.0)
 V_every_visit = mc_prediction(episodes, method="every_visit", gamma=1.0)
 
 print("First-Visit MC Results:")
