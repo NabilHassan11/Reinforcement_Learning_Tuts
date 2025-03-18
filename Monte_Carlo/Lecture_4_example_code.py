@@ -72,7 +72,7 @@ def mc_prediction(episodes, method="first_visit", gamma=1.0):
     return V
 
 # Calculate values using First-Visit and Every-Visit MC
-# V_first_visit = mc_prediction(episodes, method="first_visit", gamma=1.0)
+V_first_visit = mc_prediction(episodes, method="first_visit", gamma=1.0)
 V_every_visit = mc_prediction(episodes, method="every_visit", gamma=1.0)
 
 print("First-Visit MC Results:")
