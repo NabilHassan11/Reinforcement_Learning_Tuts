@@ -4,11 +4,11 @@ from matplotlib.animation import FuncAnimation
 
 # Maze layout (0: empty, 1: wall, 2: start, 3: goal)
 maze = np.array([
-    [2, 0, 0, 1, 0],
+    [2, 0, 0, 1, 3],
     [0, 1, 0, 1, 0],
     [0, 1, 0, 0, 0],
     [0, 0, 0, 1, 1],
-    [1, 0, 0, 0, 3]
+    [1, 0, 0, 0, 0]
 ])
 
 # Define parameters
