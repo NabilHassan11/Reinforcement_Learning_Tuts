@@ -145,7 +145,7 @@ The goal is to learn a policy that maximizes total undiscounted rewards (\( \gam
 ---
 
 ### Visualization
-![Policy Evolution](https://via.placeholder.com/800x400.png?text=Policy+Evolution+Plot)  
+![Policy Evolution](./Monte_Carlo/assets/Figure1.png) 
 *The plot shows the probability of choosing actions A/B in `S1` over 100 episodes, converging to 95% for the optimal action (A).*
 
 ---
