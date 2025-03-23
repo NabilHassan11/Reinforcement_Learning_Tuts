@@ -33,7 +33,7 @@ rewards = {
 # Algorithm Parameters
 # ---------------------------
 gamma = 1.0       # Discount factor
-epsilon = 0.1     # Exploration rate
+epsilon = 0.2     # Exploration rate
 episodes = 100     # Number of training episodes
 
 # ---------------------------
