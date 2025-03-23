@@ -73,6 +73,83 @@ Explore algorithms and implementations for solving MDPs using DP methods:
 
 ---
 
+# 2️⃣ Monte Carlo & MDP
+## Epsilon-Greedy Monte Carlo Control for a Simple MDP
+
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.5%2B-orange)](https://matplotlib.org/)
+
+This repository demonstrates **Epsilon-Greedy Monte Carlo Control** for solving a simple Markov Decision Process (MDP). The agent learns to maximize cumulative rewards in a deterministic environment while balancing exploration and exploitation using an ε-soft policy.
+
+---
+
+### Problem Description
+The agent starts in state `S1` and must learn the optimal path to a terminal state, choosing between:
+1. A **short-term reward** (immediate termination with +2 reward).
+2. A **long-term reward** (transitioning to an intermediate state `S2` for +5 reward, then terminating with +10 reward).
+
+The goal is to learn a policy that maximizes total undiscounted rewards (\( \gamma = 1 \)).
+
+---
+
+### Environment Setup
+#### States
+- `S1`: Initial state.
+- `S2`: Intermediate state.
+- `Terminal`: Absorbing state (episode ends).
+
+#### Actions & Transitions
+| State     | Actions | Next State | Reward |
+|-----------|---------|------------|--------|
+| `S1`      | `A`     | `S2`       | +5     |
+| `S1`      | `B`     | `Terminal` | +2     |
+| `S2`      | `C`     | `Terminal` | +10    |
+
+---
+
+### Algorithm: Epsilon-Greedy Monte Carlo Control
+1. **Initialization**:
+   - Q-values for all state-action pairs start at 0.
+   - Policy starts as ε-soft (50% probability for actions A/B in `S1`).
+2. **Training**:
+   - Generates 100 episodes using the current policy.
+   - Processes episodes backward to compute returns (**first-visit MC**).
+   - Updates Q-values incrementally using observed returns.
+   - Adjusts the policy to balance exploration (ε = 0.1) and exploitation.
+3. **Policy Update**:
+   - **95% probability** for the best action (exploitation).
+   - **5% probability** for other actions (exploration).
+
+---
+
+### Key Features
+- **Model-Free RL**: Learns directly from episodic experience.
+- **Exploration-Exploitation**: ε-greedy strategy ensures robustness.
+- **First-Visit MC**: Updates Q-values only for the first occurrence of state-action pairs.
+- **Visualization**: Tracks policy evolution over episodes.
+
+---
+
+### Results
+#### Expected Q-Values
+| State-Action | Q-Value |
+|--------------|---------|
+| `(S1, A)`    | 15.00   |
+| `(S1, B)`    | 2.00    |
+| `(S2, C)`    | 10.00   |
+
+#### Final Policy for `S1`
+- **Action A (Go to S2)**: 95.0%
+- **Action B (Terminate)**: 5.0%
+
+---
+
+### Visualization
+![Policy Evolution](https://via.placeholder.com/800x400.png?text=Policy+Evolution+Plot)  
+*The plot shows the probability of choosing actions A/B in `S1` over 100 episodes, converging to 95% for the optimal action (A).*
+
+---
+
 ## 🚀 Quick Start
 ### Prerequisites
 - Python 3.8+
