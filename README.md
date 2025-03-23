@@ -154,6 +154,7 @@ The goal is to learn a policy that maximizes total undiscounted rewards (\( \gam
 ### Prerequisites
 - Python 3.8+
 - NumPy (`pip install numpy`)
+- matplotlib (`pip install numpy matplotlib`)
 
 ### Installation
 ```bash
