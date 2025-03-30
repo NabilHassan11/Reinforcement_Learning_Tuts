@@ -78,7 +78,7 @@ for episode in range(episodes):
         # Q-learning update
         old_value = q_table[state[0], state[1], action]
         next_max = np.max(q_table[next_state[0], next_state[1]])
-        new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
+        new_value = old_value + alpha * (reward + gamma * next_max - old_value)
         q_table[state[0], state[1], action] = new_value
         
         # Update visualization every 50 episodes
@@ -90,10 +90,15 @@ for episode in range(episodes):
             
         state = next_state
 
-# Animation function
+# Animation function with early stopping
 def update(frame):
     y, x = history[frame]
     agent_patch.center = (x, y)
+    
+    # Stop animation if goal is reached
+    if np.array_equal([x, y], goal_pos):
+        ani.event_source.stop()
+    
     return agent_patch,
 
 # Create animation

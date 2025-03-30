@@ -53,7 +53,7 @@ def mc_prediction(episodes, method="first_visit", gamma=1.0):
             state = states[t]
             # print(state)
             reward = rewards[t]
-            G = gamma * G + reward  # Update discounted return
+            G = gamma * G + reward  # Update discounted return instead of G = Rn + gamma*R(n+1) + gamma^2*R(n+2)+ ...
             
             # Update returns based on the method
             if method == "first_visit":
