@@ -93,7 +93,7 @@ for episode_num in range(5000):  # Run multiple episodes
         if action != pi[state]:
             break
         
-        # Update importance sampling weight (since b is uniform, P(b) = 1/4)
+        # Update importance sampling weight (since b is uniform, P(b) = 1/4) W *= 4
         W *= 1.0 / 0.25
 
 # Print learned policy
