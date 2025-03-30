@@ -12,6 +12,18 @@ alpha = 0.1  # Learning rate
 # Initialize Q-values and policy
 Q = {(r, c): {a: 0.0 for a in ACTIONS} for r in range(GRID_SIZE) for c in range(GRID_SIZE)}
 pi = {(r, c): random.choice(ACTIONS) for r in range(GRID_SIZE) for c in range(GRID_SIZE)}
+C = np.zeros((4, 5, 5))
+# print(C[1,0,0])
+
+def get_C(action):
+    if(action == 'N'):
+        return 0
+    elif(action == 'S'):
+        return 1
+    elif(action == 'E'):
+        return 2
+    elif(action == 'W'):
+        return 3
 
 def get_next_state(state, action):
     """Returns the next state given an action while staying within the grid."""
@@ -53,8 +65,26 @@ for episode_num in range(5000):  # Run multiple episodes
         state, action, reward = episode[t]
         G = gamma * G + reward  # Compute return
         
-        # Update Q-value using α and importance weight W
-        Q[state][action] += alpha * W * (G - Q[state][action])
+        
+        #######################################################################################
+        
+        C[get_C(action), state[0], state[1]] += W
+        
+        # Update Q-value using C and importance weight W
+        Q[state][action] += float(W/C[get_C(action), state[0], state[1]]) * (G - Q[state][action])
+        
+        ### This Method yielded better results than the α- learning rate one ###
+        
+        ########################################################################################
+        
+        ########################################################################################
+        
+        ### uncomment this to use and comment the above ###
+        
+        # # Update Q-value using α and importance weight W
+        # Q[state][action] += alpha * W * (G - Q[state][action])
+        
+        ########################################################################################
         
         # Update target policy π to be greedy
         pi[state] = max(Q[state], key=Q[state].get)  # Choose best action
