@@ -65,7 +65,7 @@ def epsilon_greedy(state, epsilon):
     return actions[np.argmax(q_table[state[0], state[1]])]
 
 # ======================
-# SARSA TRAINING LOOP
+# Q-Learning TRAINING LOOP
 # ======================
 for episode in range(episodes):
     state = start_pos
@@ -79,7 +79,7 @@ for episode in range(episodes):
         reward = get_reward(next_state)
         next_action = actions[np.argmax(q_table[next_state[0], next_state[1]])]
         
-        # SARSA update
+        # Q-Learning update
         current_q = q_table[state[0], state[1], actions.index(action)]
         next_q = q_table[next_state[0], next_state[1], actions.index(next_action)]
         q_table[state[0], state[1], actions.index(action)] += alpha * (
