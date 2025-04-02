@@ -152,7 +152,7 @@ The goal is to learn a policy that maximizes total undiscounted rewards (\( \gam
 
 # 3️⃣ TD Learning (SARSA & Q-Learning)
 
-## Project Description
+## Problem Description
 
 This project demonstrates how **Temporal Difference (TD) learning** methods (SARSA and Q-Learning) can solve a gridworld maze:
 - The maze is a 10x10 grid with:
