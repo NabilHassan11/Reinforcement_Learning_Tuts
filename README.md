@@ -150,6 +150,8 @@ The goal is to learn a policy that maximizes total undiscounted rewards (\( \gam
 
 ---
 
+# 3️⃣ TD Learning (SARSA & Q-Learning)
+
 ## 🚀 Quick Start
 ### Prerequisites
 - Python 3.8+
