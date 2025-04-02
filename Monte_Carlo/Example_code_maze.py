@@ -7,8 +7,8 @@ maze = np.array([
     [2, 0, 0, 1, 3],
     [0, 1, 0, 1, 0],
     [0, 1, 0, 0, 0],
-    [0, 0, 0, 1, 1],
-    [1, 0, 0, 0, 0]
+    [0, 1, 0, 1, 1],
+    [0, 0, 0, 0, 0]
 ])
 
 # Define parameters
@@ -96,7 +96,7 @@ def update(frame):
     agent_patch.center = (x, y)
     
     # Stop animation if goal is reached
-    if np.array_equal([x, y], goal_pos):
+    if np.array_equal([y, x], goal_pos):
         ani.event_source.stop()
     
     return agent_patch,
