@@ -152,6 +152,47 @@ The goal is to learn a policy that maximizes total undiscounted rewards (\( \gam
 
 # 3️⃣ TD Learning (SARSA & Q-Learning)
 
+## Problem Description
+
+This project demonstrates how **Temporal Difference (TD) learning** methods (SARSA and Q-Learning) can solve a gridworld maze:
+- The maze is a 10x10 grid with:
+  - **Start position** (green)
+  - **Goal position** (red)
+  - **Walls** (black)
+- The agent learns to navigate from start to goal by maximizing cumulative rewards while avoiding walls.
+- Includes visualization of:
+  - Learning progression (steps per episode)
+  - Optimal paths at different training stages
+  - Final policy
+
+---
+
+## Features
+
+- **Maze Configuration**:
+  - Predefined 10x10 layout with walls, start, and goal
+  - Customizable maze structure (`maze.py`)
+- **Reinforcement Learning**:
+  - SARSA (on-policy TD control)
+  - Q-Learning (off-policy TD control)
+- **Visualization**:
+  - Maze grid with optimal path overlay
+  - Learning curve (steps per episode)
+  - Progressive path evolution during training
+- **Hyperparameter Tuning**:
+  - Adjust learning rate (`alpha`), discount factor (`gamma`), and exploration rate (`epsilon`)
+
+---
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/NabilHassan11/Reinforcement_Learning_Tuts.git
+   cd SARSA_maze_code.py
+
+---
+
 ## 🚀 Quick Start
 ### Prerequisites
 - Python 3.8+
