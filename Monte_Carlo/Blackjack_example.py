@@ -11,6 +11,7 @@ USABLE_ACE = [True, False]
 # Initialize Q-table and policy
 Q = np.zeros((22, 11, 2, len(ACTIONS)))  # Q[player_sum][dealer_card][usable_ace][action]
 policy = np.full((22, 11, 2), 'HIT', dtype=object)  # Initialize to HIT
+counts = np.zeros((22, 11, 2, len(ACTIONS)), dtype=int)  # Visit counts
 
 # Set initial policy: Stick only on 20 or 21 (from the book example)
 for p_sum in range(12, 22):
@@ -89,60 +90,69 @@ def generate_episode():
     
     return episode, reward
 
-# Monte Carlo ES Training
-num_episodes = 500000
-returns_sum = np.zeros_like(Q)
-returns_count = np.zeros_like(Q)
+# Training with incremental updates
+num_episodes = 1000000
 
 for i in range(num_episodes):
     if (i+1) % 100000 == 0:
-        print(f"Processing episode {i+1}/{num_episodes}")
+        print(f"Episode {i+1}/{num_episodes}")
     
     episode, reward = generate_episode()
     
-    # Update Q-values
+    # Update Q-values incrementally
     for (state, action) in episode:
-        player_sum, dealer_card, usable_ace = state
+        p_sum, d_card, usable_ace = state
         ace_idx = int(usable_ace)
         action_idx = ACTIONS.index(action)
         
-        returns_sum[player_sum, dealer_card, ace_idx, action_idx] += reward
-        returns_count[player_sum, dealer_card, ace_idx, action_idx] += 1
-        if returns_count[player_sum, dealer_card, ace_idx, action_idx] > 0:
-            Q[player_sum, dealer_card, ace_idx, action_idx] = (
-                returns_sum[player_sum, dealer_card, ace_idx, action_idx] /
-                returns_count[player_sum, dealer_card, ace_idx, action_idx]
-            )
+        counts[p_sum, d_card, ace_idx, action_idx] += 1
+        alpha = 1 / counts[p_sum, d_card, ace_idx, action_idx]
+        Q[p_sum, d_card, ace_idx, action_idx] += alpha * (
+            reward - Q[p_sum, d_card, ace_idx, action_idx]
+        )
     
     # Update policy greedily
     for (state, _) in episode:
-        player_sum, dealer_card, usable_ace = state
+        p_sum, d_card, usable_ace = state
         ace_idx = int(usable_ace)
         
-        if returns_count[player_sum, dealer_card, ace_idx].sum() > 0:
-            best_action = np.argmax(Q[player_sum, dealer_card, ace_idx])
-            policy[player_sum, dealer_card, ace_idx] = ACTIONS[best_action]
+        if np.sum(counts[p_sum, d_card, ace_idx]) > 0:
+            best_action = np.argmax(Q[p_sum, d_card, ace_idx])
+            policy[p_sum, d_card, ace_idx] = ACTIONS[best_action]
 
 # Visualization
-def plot_policy(policy_matrix, usable_ace):
-    plt.figure(figsize=(10, 6))
-    plt.title(f"Optimal Policy ({'With Usable Ace' if usable_ace else 'No Usable Ace'})")
-    plt.xlabel("Dealer Showing Card")
-    plt.ylabel("Player Sum")
-    plt.xticks(range(1, 11))
-    plt.yticks(range(12, 22))
+def plot_combined_policies(policy_matrix):
+    fig, axes = plt.subplots(1, 2, figsize=(18, 6))
+    fig.suptitle('Optimal Blackjack Policies', y=0.98, fontsize=14)
     
-    data = np.zeros((10, 10))  # 10 dealer cards x 10 player sums (12-21)
+    titles = ['With Usable Ace', 'Without Usable Ace']
+    cmap = plt.get_cmap('RdYlGn')
     
-    for p_sum in range(12, 22):
-        for d_card in range(1, 11):
-            action = policy[p_sum, d_card, int(usable_ace)]
-            data[p_sum-12, d_card-1] = 0 if action == 'HIT' else 1
-    
-    plt.imshow(data, cmap='RdYlGn', origin='lower', 
-              extent=[0.5, 10.5, 11.5, 21.5], aspect='auto')
-    plt.colorbar(ticks=[0, 1], label='Action (0=HIT, 1=STICK)')
+    for i, (usable_ace, title) in enumerate(zip([True, False], titles)):
+        # Create policy matrix
+        data = np.zeros((10, 10))
+        for p_sum in range(12, 22):
+            for d_card in range(1, 11):
+                action = policy[p_sum, d_card, int(usable_ace)]
+                data[p_sum-12, d_card-1] = 0 if action == 'HIT' else 1
+        
+        # Plot to subplot
+        im = axes[i].imshow(data, cmap=cmap, origin='lower', 
+                          extent=[0.5, 10.5, 11.5, 21.5], aspect='auto')
+        axes[i].set_title(title, pad=12)
+        axes[i].set_xlabel('Dealer Showing Card')
+        axes[i].set_ylabel('Player Sum')
+        axes[i].set_xticks(range(1, 11))
+        axes[i].set_yticks(range(12, 22))
+        
+        # Add colorbar for each subplot
+        cbar = fig.colorbar(im, ax=axes[i], shrink=0.8)
+        cbar.set_ticks([0, 1])
+        cbar.set_ticklabels(['HIT (0)', 'STICK (1)'])
+        cbar.set_label('Optimal Action', rotation=270, labelpad=10)
+
+    plt.tight_layout()
     plt.show()
 
-plot_policy(policy, usable_ace=True)
-plot_policy(policy, usable_ace=False)
+# Call the combined plotting function
+plot_combined_policies(policy)
