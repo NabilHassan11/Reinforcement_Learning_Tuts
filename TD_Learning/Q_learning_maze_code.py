@@ -81,13 +81,15 @@ for episode in range(episodes):
         
         # Q-Learning update
         current_q = q_table[state[0], state[1], actions.index(action)]
-        next_q = q_table[next_state[0], next_state[1], actions.index(next_action)]
+        max_next_q = np.max(q_table[next_state[0], next_state[1]])  # Max Q-value for next state
+        
         q_table[state[0], state[1], actions.index(action)] += alpha * (
-            reward + gamma * next_q - current_q
+            reward + gamma * max_next_q - current_q
         )
         
-        # Transition to next state
-        state, action = next_state, next_action
+        # Transition to next state WITH EXPLORATION
+        state = next_state
+        action = epsilon_greedy(state, epsilon)  # Use epsilon-greedy here
         steps += 1
         episode_reward += reward
         
@@ -108,7 +110,7 @@ snapshots.append(q_table.copy())
 # ======================
 def plot_paths(snapshots):
     fig = plt.figure(figsize=(20, 15))
-    fig.suptitle('Path Progression During SARSA Training', y=1, fontsize=12)
+    fig.suptitle('Path Progression During Q-Learning Training', y=1, fontsize=12)
     
     # Create colormap
     cmap = mcolors.ListedColormap(['white', 'black', 'green', 'red'])
