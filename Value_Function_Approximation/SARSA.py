@@ -1,6 +1,7 @@
 import numpy as np
 from tqdm import tqdm
-import matplotlib.pyplot as plt  # Fixed import
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 class StochasticWalkSARSA:
     def __init__(self, alpha=0.1, gamma=0.95, epsilon=0.1):
@@ -15,6 +16,8 @@ class StochasticWalkSARSA:
         self.w_right = np.zeros(self.num_buckets)
         self.history_left = []
         self.history_right = []
+        self.value_history = []  # Track Q-values over episodes
+        self.policy_map = np.zeros(self.n_states)
 
     def bucket_state(self, state):
         return (state - 1) // self.bucket_size
@@ -33,15 +36,18 @@ class StochasticWalkSARSA:
     def generate_episode(self):
         state = 500
         episode = []
-        while state not in self.terminal_states:
+        steps = 0
+        max_steps = 1000
+        while state not in self.terminal_states and steps < max_steps:
             action = self.choose_action(state)
             if np.random.random() < 0.5:
-                next_state = max(0, state - 100) if action == 'left' else min(999, state + 100)
+                next_state = np.random.randint(max(0, state - 100), state + 1) if action == 'left' else np.random.randint(state, min(1000, state + 101))
             else:
-                next_state = min(999, state + 100) if action == 'left' else max(0, state - 100)
+                next_state = np.random.randint(state, min(1000, state + 101)) if action == 'left' else np.random.randint(max(0, state - 100), state + 1)
             reward = self.terminal_states.get(next_state, -1)
             episode.append((state, action, reward, next_state))
             state = next_state
+            steps += 1
         return episode
 
     def update_weights(self, episode):
@@ -58,13 +64,16 @@ class StochasticWalkSARSA:
                 self.w_right[bucket] += self.alpha * td_error
 
     def train(self, num_episodes):
+        self.value_history = []  # Reset history at the start of training
         for _ in tqdm(range(num_episodes)):
             episode = self.generate_episode()
             self.update_weights(episode)
             self.epsilon *= 0.995
-            # Track weights for plotting
             self.history_left.append(self.w_left.copy())
             self.history_right.append(self.w_right.copy())
+            self.value_history.append(self.get_q_value(500, 'right'))  # Track the Q-value of the center state
+
+        print("Q-values for bucket 0:", self.w_left[0], self.w_right[0])
 
     def print_policy(self):
         print("Bucket | Preferred Action")
@@ -96,21 +105,33 @@ class StochasticWalkSARSA:
         plt.title("Final Policy: 0 = Left, 1 = Right")
         plt.xlabel("Bucket")
         plt.ylabel("Preferred Action")
-
-        # Label each bar with the actual action
         for i, bar in enumerate(bars):
             plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.05, actions[i],
-                    ha='center', va='bottom', fontsize=10)
-
+                     ha='center', va='bottom', fontsize=10)
         plt.ylim(0, 1.5)
         plt.grid(True, axis='y')
         plt.tight_layout()
         plt.show()
 
+    def plot_policy_heatmap(self):
+        state_preferences = np.zeros(self.n_states)
+        for state in range(1, self.n_states - 1):
+            left_q = self.get_q_value(state, 'left')
+            right_q = self.get_q_value(state, 'right')
+            state_preferences[state] = 1 if right_q > left_q else 0
+        plt.figure(figsize=(14, 2))
+        sns.heatmap(state_preferences.reshape(1, -1), cmap='coolwarm', cbar=True, xticklabels=100)
+        plt.title("State-wise Preferred Action Heatmap (0 = Left, 1 = Right)")
+        plt.xlabel("State")
+        plt.yticks([])
+        plt.tight_layout()
+        plt.show()
+
 
 if __name__ == "__main__":
-    agent = StochasticWalkSARSA(alpha=0.1, gamma=0.95, epsilon=0.2)
-    agent.train(20000)
+    agent = StochasticWalkSARSA(alpha=0.1, gamma=0.95, epsilon=0.3)
+    agent.train(30000)
     agent.print_policy()
     agent.plot_weights()
     agent.plot_final_policy()
+    agent.plot_policy_heatmap()
