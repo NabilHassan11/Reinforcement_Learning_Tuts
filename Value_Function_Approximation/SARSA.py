@@ -130,7 +130,7 @@ class StochasticWalkSARSA:
 
 if __name__ == "__main__":
     agent = StochasticWalkSARSA(alpha=0.1, gamma=0.95, epsilon=0.3)
-    agent.train(30000)
+    agent.train(2000)
     agent.print_policy()
     agent.plot_weights()
     agent.plot_final_policy()

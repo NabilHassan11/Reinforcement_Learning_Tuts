@@ -63,7 +63,7 @@ class StochasticWalkQLearning:
             else:
                 self.w_right[bucket] += self.alpha * td_error
 
-    def train(self, num_episodes=10000):
+    def train(self, num_episodes):
         self.value_history = []
         for _ in tqdm(range(num_episodes)):
             episode = self.generate_episode()
@@ -120,7 +120,7 @@ class StochasticWalkQLearning:
 
 if __name__ == "__main__":
     agent = StochasticWalkQLearning(alpha=0.1, gamma=0.95, epsilon=0.3)
-    agent.train(30000)
+    agent.train(2000)
     agent.plot_results()
     agent.print_policy()
     agent.plot_policy_heatmap()
