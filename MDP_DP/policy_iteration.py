@@ -17,6 +17,7 @@ def get_reward(next_state):
     if next_state == 'O': return 20
     elif next_state == 'NM': return -5
     elif next_state == 'B': return -50
+    elif next_state == 'M': return 0
     return 0  # Maintenance state
 
 # ================== Transition Function ==================
@@ -37,14 +38,14 @@ def get_transitions(state, action):
             transitions = [('M', 1.0)]
             
     elif state == 'M':
-        if action == 'SM':
+        if action == 'PM':
             transitions = [('O', 1.0)]
         else:
             transitions = [('M', 1.0)]
             
     elif state == 'B':
         if action == 'R':
-            transitions = [('O', 1.0)]
+            transitions = [('M', 1.0)]
         else:
             transitions = [('B', 1.0)]
     
